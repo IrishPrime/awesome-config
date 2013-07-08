@@ -1,15 +1,15 @@
--- Standard awesome library
-local gears = require("gears")
+-- Standard Awesome plugins and libraries
 local awful = require("awful")
 awful.rules = require("awful.rules")
 require("awful.autofocus")
--- Widget and layout library
-local wibox = require("wibox")
--- Theme handling library
-local beautiful = require("beautiful")
--- Notification library
-local naughty = require("naughty")
+local gears = require("gears")
+local beautiful = require("beautiful") -- Theme handling library
 local menubar = require("menubar")
+local naughty = require("naughty") -- Notification library
+local wibox = require("wibox")
+-- Custom Awesome plugins and libraries
+local keydoc = require("keydoc") -- From the wiki
+--local cpuwidget = require("widgets.cpu")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -82,23 +82,32 @@ end
 tags = {}
 for s = 1, screen.count() do
 	-- Each screen has its own tag table.
-	tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+	tags[s] = awful.tag({ "web", "tty", "vim", "comm", "fm", "office", "vm", "gtk", "misc" }, s, layouts[2])
 end
 -- }}}
 
 -- {{{ Menu
 -- Create a laucher widget and a main menu
 myawesomemenu = {
-	{ "Manual", terminal .. " -e man awesome" },
-	{ "Edit Config", editor_cmd .. " " .. awesome.conffile },
-	{ "Restart", awesome.restart },
-	{ "Quit", awesome.quit }
+	{ "Manual", terminal .. " -e man awesome", "/usr/share/icons/Clarity/scalable/actions/info.svg" },
+	{ "Edit Config", editor_cmd .. " " .. awesome.conffile, "/usr/share/icons/Clarity/scalable/categories/package_settings.svg" },
+	{ "Lock Screen", "screenlock.sh", "/usr/share/icons/Clarity/scalable/status/locked.svg" },
+	{ "Restart", awesome.restart, "/usr/share/icons/Clarity/scalable/apps/gnome-session-reboot.svg" },
+	{ "Quit", awesome.quit, "/usr/share/icons/Clarity/scalable/apps/gnome-session-halt.svg" }
 }
 
 mymainmenu = awful.menu({
 	items = {
 		{ "Awesome", myawesomemenu, beautiful.awesome_icon },
-		{ "Open Terminal", terminal }
+		{ "Terminal", terminal, "/usr/share/icons/Clarity/scalable/apps/terminal.svg" },
+		{ "File Explorer", "nautilus", "/usr/share/icons/Clarity/scalable/apps/nautilus.svg" },
+		{ "GVim", "gvim", "/usr/share/icons/Clarity/scalable/apps/gvim.svg" },
+		{ "Google Chrome", "google-chrome", "/usr/share/icons/Clarity/scalable/apps/chromium-browser.svg" },
+		{ "Pidgin", "pidgin", "/usr/share/icons/Clarity/scalable/apps/pidgin.svg" },
+		{ "Thunderbird", "thunderbird", "/usr/share/icons/Clarity/scalable/apps/thunderbird.svg" },
+		{ "X-Chat", "xchat", "/usr/share/icons/Clarity/scalable/apps/xchat.svg" },
+		{ "Writer", "libreoffice --writer", "/usr/share/icons/Clarity/scalable/apps/libreoffice-writer.svg" },
+		{ "VirtualBox", "virtualbox", "/usr/share/icons/Clarity/scalable/apps/vbox.svg"  },
 	}
 })
 
@@ -109,6 +118,15 @@ mylauncher = awful.widget.launcher({
 
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
+menubar.cache_entries = true
+menubar.app_folders = { "/usr/share/applications/" }
+menubar.show_categories = true
+-- }}}
+
+-- {{{ Naughty
+naughty.config.presets.low.opacity = 1.0
+naughty.config.presets.normal.opacity = 1.0
+naughty.config.presets.critical.opacity = 1.0
 -- }}}
 
 -- {{{ Wibox
@@ -231,37 +249,51 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey,           }, "w", function () mymainmenu:show() end),
 
 	-- Layout manipulation
-	awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end),
-	awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end),
-	awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end),
-	awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end),
-	awful.key({ modkey,           }, "u", awful.client.urgent.jumpto),
+	keydoc.group("Layout manipulation"),
+	awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end, "Swap with next window"),
+	awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end, "Swap with previous window"),
+	awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end, "Next screen"),
+	awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end, "Previous screen"),
+	awful.key({ modkey,           }, "u", awful.client.urgent.jumpto, "Focus urgent client"),
 	awful.key({ modkey,           }, "Tab",
 		function ()
 			awful.client.focus.history.previous()
 			if client.focus then
 				client.focus:raise()
 			end
-		end),
+		end,
+		"Focus last client (on same tag)"),
 
 	-- Standard program
-	awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
-	awful.key({ modkey, "Control" }, "r", awesome.restart),
-	awful.key({ modkey, "Shift"   }, "q", awesome.quit),
+	keydoc.group("Standard Programs"),
+	awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal)        end, "Terminal"),
+	awful.key({ modkey,           }, "w",      function () awful.util.spawn("google-chrome") end, "Google Chrome"),
+	awful.key({ modkey,           }, "v",      function () awful.util.spawn("gvim")          end, "GVim"),
+	awful.key({ modkey,           }, "e",      function () awful.util.spawn("nautilus")      end, "File explorer"),
 
-	awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
-	awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
-	awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
-	awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
-	awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
-	awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end),
-	awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
-	awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
+	-- Awesome
+	keydoc.group("Awesome"),
+	awful.key({ modkey, "Control" }, "r", awesome.restart, "Restart Awesome"),
+	awful.key({ modkey, "Shift"   }, "q", awesome.quit, "Quit Awesome"),
+	awful.key({ modkey, }, "F1", keydoc.display, "Display this help"),
+	awful.key({ modkey,           }, "/",      function () awful.util.spawn("screenlock.sh") end, "Lock screen"),
+
+	-- Tag Manipulation
+	keydoc.group("Tag manipulation"),
+	awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end, "Increase master width"),
+	awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end, "Decrease master width"),
+	awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end, "Increase number of master clients"),
+	awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end, "Decrease number of master clients"),
+	awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end, "Increase stack columns"),
+	awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end, "Decrease stack columns"),
+	awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end, "Next layout"),
+	awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end, "Previous layout"),
 
 	awful.key({ modkey, "Control" }, "n", awful.client.restore),
 
-	-- Prompt
-	awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
+	-- Prompts
+	keydoc.group("Prompts"),
+	awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end, "Run prompt"),
 
 	awful.key({ modkey }, "x",
 		function ()
@@ -269,17 +301,20 @@ globalkeys = awful.util.table.join(
 			mypromptbox[mouse.screen].widget,
 			awful.util.eval, nil,
 			awful.util.getdir("cache") .. "/history_eval")
-		end),
-	-- Menubar
-	awful.key({ modkey }, "p", function() menubar.show() end))
+		end,
+		"Lua prompt"),
 
+	awful.key({ modkey }, "p", function() menubar.show() end, "Menubar"))
+
+-- Clients
 clientkeys = awful.util.table.join(
-	awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
-	awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
-	awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
-	awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
-	awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
-	awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
+	keydoc.group("Client manipulation"),
+	awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end, "Toggle fullscreen"),
+	awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end, "Kill client"),
+	awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     , "Toggle floating"),
+	awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end, "Swap with master"),
+	awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        , "Move to next screen"),
+	awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end, "Always on top"),
 	awful.key({ modkey,           }, "n",
 		function (c)
 			-- The client currently has the input focus, so it cannot be
@@ -290,7 +325,8 @@ clientkeys = awful.util.table.join(
 		function (c)
 			c.maximized_horizontal = not c.maximized_horizontal
 			c.maximized_vertical   = not c.maximized_vertical
-		end))
+		end,
+		"Toggle maximize"))
 
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
@@ -436,6 +472,7 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 local oldspawn = awful.util.spawn
 awful.util.spawn = function (s)
 	oldspawn(s, false)
-end-- }}}
+end
+-- }}}
 
 -- vim: foldmethod=marker
