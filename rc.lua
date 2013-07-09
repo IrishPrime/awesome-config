@@ -38,13 +38,13 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init("/home/moneill/.config/awesome/themes/archsome/theme.lua")
+beautiful.init(awful.util.getdir("config").."/themes/archsome/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "gnome-terminal"
-editor = os.getenv("EDITOR") or "vim"
+editor = os.getenv("VISUAL") or os.getenv("EDITOR") or "gvim"
 explorer = "nautilus"
-editor_cmd = terminal .. " -e " .. editor
+editor_cmd = editor
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -92,25 +92,32 @@ awful.tag.setmwfact(0.12, tags[2][4]) -- Set a reasonable amount of space for th
 -- {{{ Menu
 -- Create a laucher widget and a main menu
 myawesomemenu = {
-	{ "Manual", terminal .. " -e man awesome", "/usr/share/icons/Clarity/scalable/actions/info.svg" },
-	{ "Edit Config", editor_cmd .. " " .. awesome.conffile, "/usr/share/icons/Clarity/scalable/categories/package_settings.svg" },
-	{ "Lock Screen", "screenlock.sh", "/usr/share/icons/Clarity/scalable/status/locked.svg" },
-	{ "Restart", awesome.restart, "/usr/share/icons/Clarity/scalable/apps/gnome-session-reboot.svg" },
-	{ "Quit", awesome.quit, "/usr/share/icons/Clarity/scalable/apps/gnome-session-halt.svg" }
+	{ "Manual", terminal .. " -e man awesome", beautiful.icon_path .. "actions/info.svg" },
+	{ "Edit Config", editor_cmd .. " " .. awesome.conffile, beautiful.icon_path .. "categories/package_settings.svg" },
+	{ "Lock Screen", "screenlock.sh", beautiful.icon_path .. "status/locked.svg" },
+	{ "Restart", awesome.restart, beautiful.icon_path .. "apps/gnome-session-reboot.svg" },
+	{ "Quit", awesome.quit, beautiful.icon_path .. "apps/gnome-session-halt.svg" }
+}
+
+libreofficemenu = {
+	{ "Calc",    "libreoffice --calc",    beautiful.icon_path .. "apps/libreoffice-calc.svg" },
+	{ "Draw",    "libreoffice --draw",    beautiful.icon_path .. "apps/libreoffice-draw.svg" },
+	{ "Impress", "libreoffice --impress", beautiful.icon_path .. "apps/libreoffice-impress.svg" },
+	{ "Writer",  "libreoffice --writer",  beautiful.icon_path .. "apps/libreoffice-writer.svg" },
 }
 
 mymainmenu = awful.menu({
 	items = {
-		{ "Awesome", myawesomemenu, beautiful.awesome_icon },
-		{ "Terminal", terminal, "/usr/share/icons/Clarity/scalable/apps/terminal.svg" },
-		{ "File Explorer", explorer, "/usr/share/icons/Clarity/scalable/apps/nautilus.svg" },
-		{ "GVim", "gvim", "/usr/share/icons/Clarity/scalable/apps/gvim.svg" },
-		{ "Google Chrome", "google-chrome", "/usr/share/icons/Clarity/scalable/apps/chromium-browser.svg" },
-		{ "Pidgin", "pidgin", "/usr/share/icons/Clarity/scalable/apps/pidgin.svg" },
-		{ "Thunderbird", "thunderbird", "/usr/share/icons/Clarity/scalable/apps/thunderbird.svg" },
-		{ "X-Chat", "xchat", "/usr/share/icons/Clarity/scalable/apps/xchat.svg" },
-		{ "Writer", "libreoffice --writer", "/usr/share/icons/Clarity/scalable/apps/libreoffice-writer.svg" },
-		{ "VirtualBox", "virtualbox", "/usr/share/icons/Clarity/scalable/apps/vbox.svg"  },
+		{ "Awesome",        myawesomemenu,   beautiful.awesome_icon },
+		{ "LibreOffice",    libreofficemenu, beautiful.icon_path .. "apps/libreoffice-main.svg" },
+		{ "Terminal",       terminal,        beautiful.icon_path .. "apps/terminal.svg" },
+		{ "File Explorer",  explorer,        beautiful.icon_path .. "apps/nautilus.svg" },
+		{ "GVim",          "gvim",           beautiful.icon_path .. "apps/gvim.svg" },
+		{ "Google Chrome", "google-chrome",  beautiful.icon_path .. "apps/chromium-browser.svg" },
+		{ "Pidgin",        "pidgin",         beautiful.icon_path .. "apps/pidgin.svg" },
+		{ "Thunderbird",   "thunderbird",    beautiful.icon_path .. "apps/thunderbird.svg" },
+		{ "X-Chat",        "xchat",          beautiful.icon_path .. "apps/xchat.svg" },
+		{ "VirtualBox",    "virtualbox",     beautiful.icon_path .. "apps/vbox.svg" },
 	}
 })
 
