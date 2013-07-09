@@ -86,6 +86,7 @@ for s = 1, screen.count() do
 	tags[s] = awful.tag({ "web", "tty", "vim", "comm", "fm", "office", "vm", "gtk", "misc" }, s,
 		{ layouts[1], layouts[4], layouts[2], layouts[2], layouts[2], layouts[12], layouts[12], layouts[12], layouts[1] })
 end
+awful.tag.setmwfact(0.12, tags[2][4]) -- Set a reasonable amount of space for the Buddy List on tags[2][4]
 -- }}}
 
 -- {{{ Menu
@@ -398,16 +399,24 @@ awful.rules.rules = {
 	  properties = { tag = tags[1][3] } },
 	{ rule = { class = "Xchat" },
 	  properties = { tag = tags[1][4] } },
+	-- File Managers
 	{ rule = { class = "Nautilus" },
 	  properties = { tag = tags[1][5] } },
 	{ rule = { class = "Thunar" },
 	  properties = { tag = tags[1][5] } },
+	-- LibreOffice
 	{ rule = { class = "libreoffice-calc" },
 	  properties = { tag = tags[1][6] } },
 	{ rule = { class = "libreoffice-writer" },
 	  properties = { tag = tags[1][6] } },
+	-- Pidgin: Screen 2, Tag 4. Buddy List as master, Conversations as slaves.
 	{ rule = { class = "Pidgin" },
 	  properties = { tag = tags[2][4] } },
+	{ rule = { class = "Pidgin", role = "conversation" },
+	  callback = awful.client.setslave },
+	{ rule = { class = "Pidgin", role = "buddy_list" },
+	  callback = awful.client.setmaster },
+	-- VirtualBox
 	{ rule = { class = "VirtualBox" },
 	  properties = { tag = tags[2][7] } },
 	{ rule = { class = "Thunderbird" },
