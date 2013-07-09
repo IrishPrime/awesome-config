@@ -43,6 +43,7 @@ beautiful.init("/home/moneill/.config/awesome/themes/archsome/theme.lua")
 -- This is used later as the default terminal and editor to run.
 terminal = "gnome-terminal"
 editor = os.getenv("EDITOR") or "vim"
+explorer = "nautilus"
 editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
@@ -82,7 +83,8 @@ end
 tags = {}
 for s = 1, screen.count() do
 	-- Each screen has its own tag table.
-	tags[s] = awful.tag({ "web", "tty", "vim", "comm", "fm", "office", "vm", "gtk", "misc" }, s, layouts[2])
+	tags[s] = awful.tag({ "web", "tty", "vim", "comm", "fm", "office", "vm", "gtk", "misc" }, s,
+		{ layouts[1], layouts[4], layouts[2], layouts[2], layouts[2], layouts[12], layouts[12], layouts[12], layouts[1] })
 end
 -- }}}
 
@@ -100,7 +102,7 @@ mymainmenu = awful.menu({
 	items = {
 		{ "Awesome", myawesomemenu, beautiful.awesome_icon },
 		{ "Terminal", terminal, "/usr/share/icons/Clarity/scalable/apps/terminal.svg" },
-		{ "File Explorer", "nautilus", "/usr/share/icons/Clarity/scalable/apps/nautilus.svg" },
+		{ "File Explorer", explorer, "/usr/share/icons/Clarity/scalable/apps/nautilus.svg" },
 		{ "GVim", "gvim", "/usr/share/icons/Clarity/scalable/apps/gvim.svg" },
 		{ "Google Chrome", "google-chrome", "/usr/share/icons/Clarity/scalable/apps/chromium-browser.svg" },
 		{ "Pidgin", "pidgin", "/usr/share/icons/Clarity/scalable/apps/pidgin.svg" },
@@ -238,15 +240,14 @@ globalkeys = awful.util.table.join(
 
 	awful.key({ modkey,           }, "j",
 		function ()
-			awful.client.focus.byidx( 1)
+			awful.client.focus.byidx(1)
 			if client.focus then client.focus:raise() end
 		end),
-		awful.key({ modkey,           }, "k",
-			function ()
-				awful.client.focus.byidx(-1)
-				if client.focus then client.focus:raise() end
-			end),
-	awful.key({ modkey,           }, "w", function () mymainmenu:show() end),
+	awful.key({ modkey,           }, "k",
+		function ()
+			awful.client.focus.byidx(-1)
+			if client.focus then client.focus:raise() end
+		end),
 
 	-- Layout manipulation
 	keydoc.group("Layout manipulation"),
@@ -269,10 +270,11 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal)        end, "Terminal"),
 	awful.key({ modkey,           }, "w",      function () awful.util.spawn("google-chrome") end, "Google Chrome"),
 	awful.key({ modkey,           }, "v",      function () awful.util.spawn("gvim")          end, "GVim"),
-	awful.key({ modkey,           }, "e",      function () awful.util.spawn("nautilus")      end, "File explorer"),
+	awful.key({ modkey,           }, "e",      function () awful.util.spawn(explorer)        end, "File explorer"),
 
 	-- Awesome
 	keydoc.group("Awesome"),
+	awful.key({ modkey,           }, "z", function () mymainmenu:show() end, "Awesome menu"),
 	awful.key({ modkey, "Control" }, "r", awesome.restart, "Restart Awesome"),
 	awful.key({ modkey, "Shift"   }, "q", awesome.quit, "Quit Awesome"),
 	awful.key({ modkey, }, "F1", keydoc.display, "Display this help"),
@@ -392,6 +394,24 @@ awful.rules.rules = {
       properties = { floating = true } },
 	{ rule = { class = "Google-chrome" },
 	  properties = { tag = tags[1][1] } },
+	{ rule = { class = "Gvim" },
+	  properties = { tag = tags[1][3] } },
+	{ rule = { class = "Xchat" },
+	  properties = { tag = tags[1][4] } },
+	{ rule = { class = "Nautilus" },
+	  properties = { tag = tags[1][5] } },
+	{ rule = { class = "Thunar" },
+	  properties = { tag = tags[1][5] } },
+	{ rule = { class = "libreoffice-calc" },
+	  properties = { tag = tags[1][6] } },
+	{ rule = { class = "libreoffice-writer" },
+	  properties = { tag = tags[1][6] } },
+	{ rule = { class = "Pidgin" },
+	  properties = { tag = tags[2][4] } },
+	{ rule = { class = "VirtualBox" },
+	  properties = { tag = tags[2][7] } },
+	{ rule = { class = "Thunderbird" },
+	  properties = { tag = tags[2][8] } },
 }
 -- }}}
 
