@@ -278,8 +278,9 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey,           }, "z", function () mymainmenu:show() end, "Awesome menu"),
 	awful.key({ modkey, "Control" }, "r", awesome.restart, "Restart Awesome"),
 	awful.key({ modkey, "Shift"   }, "q", awesome.quit, "Quit Awesome"),
-	awful.key({ modkey, }, "F1", keydoc.display, "Display this help"),
-	awful.key({ modkey,           }, "/",      function () awful.util.spawn("screenlock.sh") end, "Lock screen"),
+	awful.key({ modkey,           }, "/", function () awful.util.spawn("screenlock.sh") end, "Lock screen"),
+	awful.key({ modkey,           }, "Print", function () awful.util.spawn("scrot") end, "Take a screenshot"),
+	awful.key({ modkey,           }, "F1", keydoc.display, "Display this help"),
 
 	-- Tag Manipulation
 	keydoc.group("Tag manipulation"),
