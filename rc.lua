@@ -141,7 +141,10 @@ naughty.config.presets.critical.opacity = 1.0
 -- {{{ Widgets
 local cpu = require("widgets.cpu")
 local mem = require("widgets.mem")
+local disk = require("widgets.disk")
 local vol = require("widgets.volume")
+local net = require("widgets.network")
+local bat = require("widgets.battery")
 -- }}}
 
 -- {{{ Wibox
@@ -228,6 +231,12 @@ for s = 1, screen.count() do
 	right_layout:add(cpu.widget)
 	right_layout:add(mem.icon)
 	right_layout:add(mem.widget)
+	right_layout:add(disk.icon)
+	right_layout:add(disk.widget)
+	right_layout:add(net.upicon)
+	right_layout:add(net.upwidget)
+	right_layout:add(net.downicon)
+	right_layout:add(net.downwidget)
 	right_layout:add(vol.icon)
 	right_layout:add(vol.widget)
 	if s == 1 then right_layout:add(wibox.widget.systray()) end
