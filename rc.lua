@@ -9,9 +9,6 @@ local naughty = require("naughty") -- Notification library
 local wibox = require("wibox")
 -- Custom Awesome plugins and libraries
 local keydoc = require("keydoc") -- From the wiki
-local cpu = require("widgets.cpu")
-local mem = require("widgets.mem")
-local volume = require("widgets.volume")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -141,6 +138,12 @@ naughty.config.presets.normal.opacity = 1.0
 naughty.config.presets.critical.opacity = 1.0
 -- }}}
 
+-- {{{ Widgets
+local cpu = require("widgets.cpu")
+local mem = require("widgets.mem")
+local vol = require("widgets.volume")
+-- }}}
+
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock()
@@ -225,8 +228,8 @@ for s = 1, screen.count() do
 	right_layout:add(cpu.widget)
 	right_layout:add(mem.icon)
 	right_layout:add(mem.widget)
-	right_layout:add(volume.icon)
-	right_layout:add(volume.widget)
+	right_layout:add(vol.icon)
+	right_layout:add(vol.widget)
 	if s == 1 then right_layout:add(wibox.widget.systray()) end
 	right_layout:add(mytextclock)
 	right_layout:add(mylayoutbox[s])
