@@ -83,7 +83,7 @@ tags = {}
 for s = 1, screen.count() do
 	-- Each screen has its own tag table.
 	tags[s] = awful.tag({ "web", "tty", "vim", "comm", "fm", "office", "vm", "gtk", "misc" }, s,
-		{ layouts[1], layouts[4], layouts[2], layouts[2], layouts[2], layouts[12], layouts[12], layouts[12], layouts[1] })
+		{ layouts[12], layouts[4], layouts[2], layouts[2], layouts[2], layouts[12], layouts[4], layouts[12], layouts[1] })
 end
 awful.tag.setmwfact(0.12, tags[2][4]) -- Set a reasonable amount of space for the Buddy List on tags[2][4]
 -- }}}
