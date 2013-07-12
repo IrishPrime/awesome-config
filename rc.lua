@@ -9,7 +9,9 @@ local naughty = require("naughty") -- Notification library
 local wibox = require("wibox")
 -- Custom Awesome plugins and libraries
 local keydoc = require("keydoc") -- From the wiki
---local cpuwidget = require("widgets.cpu")
+local cpu = require("widgets.cpu")
+local mem = require("widgets.mem")
+local volume = require("widgets.volume")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -219,6 +221,12 @@ for s = 1, screen.count() do
 
 	-- Widgets that are aligned to the right
 	local right_layout = wibox.layout.fixed.horizontal()
+	right_layout:add(cpu.icon)
+	right_layout:add(cpu.widget)
+	right_layout:add(mem.icon)
+	right_layout:add(mem.widget)
+	right_layout:add(volume.icon)
+	right_layout:add(volume.widget)
 	if s == 1 then right_layout:add(wibox.widget.systray()) end
 	right_layout:add(mytextclock)
 	right_layout:add(mylayoutbox[s])
