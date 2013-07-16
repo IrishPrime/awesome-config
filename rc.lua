@@ -262,23 +262,25 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-	awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
-	awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
-	awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
+	-- Layout manipulation
+	keydoc.group("Layout manipulation"),
+	awful.key({ modkey,           }, "Left",   awful.tag.viewprev, "Previous tag"),
+	awful.key({ modkey,           }, "Right",  awful.tag.viewnext, "Next tag"),
+	awful.key({ modkey,           }, "Escape", awful.tag.history.restore, "Previously selected tag"),
 
 	awful.key({ modkey,           }, "j",
 		function ()
 			awful.client.focus.byidx(1)
 			if client.focus then client.focus:raise() end
-		end),
+		end,
+		"Next client"),
 	awful.key({ modkey,           }, "k",
 		function ()
 			awful.client.focus.byidx(-1)
 			if client.focus then client.focus:raise() end
-		end),
+		end,
+		"Previous client"),
 
-	-- Layout manipulation
-	keydoc.group("Layout manipulation"),
 	awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end, "Swap with next window"),
 	awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end, "Swap with previous window"),
 	awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end, "Next screen"),
@@ -291,7 +293,14 @@ globalkeys = awful.util.table.join(
 				client.focus:raise()
 			end
 		end,
-		"Focus last client (on same tag)"),
+		"Previously focused client"),
+
+	-- Volume control
+	awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set Master 5%+", false) end),
+	awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set Master 5%-", false) end),
+	awful.key({ }, "XF86AudioMute", function () awful.util.spawn("amixer sset Master toggle", false) end),
+	awful.key({ modkey,           }, "Prior", function () awful.util.spawn("amixer set Master 5%+", false) end),
+	awful.key({ modkey,           }, "Next",  function () awful.util.spawn("amixer set Master 5%-", false) end),
 
 	-- Standard program
 	keydoc.group("Standard Programs"),
