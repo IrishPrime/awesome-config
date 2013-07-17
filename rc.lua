@@ -541,4 +541,10 @@ awful.util.spawn = function (s)
 end
 -- }}}
 
+-- {{{ Autostart
+awful.util.spawn_with_shell("setxkbmap -option ctrl:nocaps")
+awful.util.spawn_with_shell("dropbox start")
+awful.util.spawn_with_shell("numlockx on")
+-- }}}
+
 -- vim: foldmethod=marker
