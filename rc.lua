@@ -40,10 +40,14 @@ end
 beautiful.init(awful.util.getdir("config").."/themes/archsome/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "gnome-terminal"
+terminal = "lxterminal"
 editor = os.getenv("VISUAL") or os.getenv("EDITOR") or "gvim"
 explorer = "nautilus"
 editor_cmd = editor
+calc_app = "gnome-calculator"
+calc_name = "GNOME Calculator"
+music_app = "google-chrome --app=https://play.google.com/music/listen"
+music_name = "Google Music"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -90,12 +94,13 @@ awful.tag.setmwfact(0.12, tags[2][4]) -- Set a reasonable amount of space for th
 
 -- {{{ Menu
 -- Create a laucher widget and a main menu
+require("menu")
 myawesomemenu = {
-	{ "Manual", terminal .. " -e man awesome", beautiful.icon_path .. "actions/info.svg" },
+	{ "Manual",      terminal .. " -e man awesome",         beautiful.icon_path .. "actions/info.svg" },
 	{ "Edit Config", editor_cmd .. " " .. awesome.conffile, beautiful.icon_path .. "categories/package_settings.svg" },
-	{ "Lock Screen", "screenlock.sh", beautiful.icon_path .. "status/locked.svg" },
-	{ "Restart", awesome.restart, beautiful.icon_path .. "apps/gnome-session-reboot.svg" },
-	{ "Quit", awesome.quit, beautiful.icon_path .. "apps/gnome-session-halt.svg" }
+	{ "Lock Screen", "screenlock.sh",                       beautiful.icon_path .. "status/locked.svg" },
+	{ "Restart",     awesome.restart,                       beautiful.icon_path .. "apps/gnome-session-reboot.svg" },
+	{ "Quit",        awesome.quit,                          beautiful.icon_path .. "apps/gnome-session-halt.svg" }
 }
 
 libreofficemenu = {
@@ -108,7 +113,8 @@ libreofficemenu = {
 mymainmenu = awful.menu({
 	items = {
 		{ "Awesome",        myawesomemenu,   beautiful.awesome_icon },
-		{ "LibreOffice",    libreofficemenu, beautiful.icon_path .. "apps/libreoffice-main.svg" },
+		{ "Applications",   myappmenu,       beautiful.icon_path .. "places/folder.svg" },
+		{ "LibreOffice",    libreofficemenu, beautiful.icon_path .. "places/folder-documents.svg" },
 		{ "Terminal",       terminal,        beautiful.icon_path .. "apps/terminal.svg" },
 		{ "File Explorer",  explorer,        beautiful.icon_path .. "apps/nautilus.svg" },
 		{ "GVim",          "gvim",           beautiful.icon_path .. "apps/gvim.svg" },
@@ -296,18 +302,28 @@ globalkeys = awful.util.table.join(
 		"Previously focused client"),
 
 	-- Volume control
-	awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set Master 5%+", false) end),
-	awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set Master 5%-", false) end),
-	awful.key({ }, "XF86AudioMute", function () awful.util.spawn("amixer sset Master toggle", false) end),
-	awful.key({ modkey,           }, "Prior", function () awful.util.spawn("amixer set Master 5%+", false) end),
-	awful.key({ modkey,           }, "Next",  function () awful.util.spawn("amixer set Master 5%-", false) end),
+	awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set Master 5%+",     false) end),
+	awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set Master 5%-",     false) end),
+	awful.key({ }, "XF86AudioMute",        function () awful.util.spawn("amixer sset Master toggle", false) end),
+	awful.key({ modkey,        }, "Prior", function () awful.util.spawn("amixer set Master 5%+",     false) end),
+	awful.key({ modkey,        }, "Next",  function () awful.util.spawn("amixer set Master 5%-",     false) end),
 
 	-- Standard program
 	keydoc.group("Standard Programs"),
-	awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal)        end, "Terminal"),
-	awful.key({ modkey,           }, "w",      function () awful.util.spawn("google-chrome") end, "Google Chrome"),
-	awful.key({ modkey,           }, "v",      function () awful.util.spawn("gvim")          end, "GVim"),
-	awful.key({ modkey,           }, "e",      function () awful.util.spawn(explorer)        end, "File explorer"),
+	awful.key({         }, "XF86HomePage",   function () awful.util.spawn("google-chrome") end, "Google Chrome"),
+	awful.key({         }, "XF86Mail",       function () awful.util.spawn("thunderbird")   end, "Thunderbird"),
+	awful.key({         }, "XF86Search",     function () awful.util.spawn(explorer)        end, "File explorer"),
+	awful.key({         }, "XF86Calculator", function () awful.util.spawn(calc_app)        end, calc_name),
+	awful.key({         }, "XF86Launch5",    function () awful.util.spawn(terminal)        end, "Terminal"),
+	awful.key({         }, "XF86Launch6",    function () awful.util.spawn("gvim")          end, "GVim"),
+	awful.key({         }, "XF86Launch7",    function () awful.util.spawn("pidgin")        end, "Pidgin IM"),
+	awful.key({         }, "XF86Launch8",    function () awful.util.spawn("xchat")         end, "X-Chat IRC"),
+	awful.key({         }, "XF86Launch9",    function () awful.util.spawn(music_app)       end, music_name),
+	awful.key({         }, "XF86Favorites",  function () awful.util.spawn("virtualbox")    end, "VirtualBox"),
+	awful.key({ modkey, }, "Return",         function () awful.util.spawn(terminal)        end, "Terminal"),
+	awful.key({ modkey, }, "w",              function () awful.util.spawn("google-chrome") end, "Google Chrome"),
+	awful.key({ modkey, }, "v",              function () awful.util.spawn("gvim")          end, "GVim"),
+	awful.key({ modkey, }, "e",              function () awful.util.spawn(explorer)        end, "File explorer"),
 
 	-- Awesome
 	keydoc.group("Awesome"),
