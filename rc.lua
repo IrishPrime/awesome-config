@@ -40,7 +40,7 @@ end
 beautiful.init(awful.util.getdir("config").."/themes/archsome/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "lxterminal"
+terminal = "gnome-terminal"
 editor = os.getenv("VISUAL") or os.getenv("EDITOR") or "gvim"
 explorer = "nautilus"
 editor_cmd = editor
