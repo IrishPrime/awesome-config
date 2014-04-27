@@ -42,7 +42,7 @@ beautiful.init(awful.util.getdir("config").."/themes/archsome/theme.lua")
 -- This is used later as the default terminal and editor to run.
 terminal = "gnome-terminal"
 editor = os.getenv("VISUAL") or os.getenv("EDITOR") or "gvim"
-explorer = "nautilus"
+explorer = "thunar"
 editor_cmd = editor
 calc_app = "gnome-calculator"
 calc_name = "GNOME Calculator"
