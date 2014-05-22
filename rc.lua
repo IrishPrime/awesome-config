@@ -37,12 +37,12 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init(awful.util.getdir("config").."/themes/archsome/theme.lua")
+beautiful.init(awful.util.getdir("config").."/themes/awesome-solarized-dark/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "gnome-terminal"
+terminal = "urxvt256c-mlc"
 editor = os.getenv("VISUAL") or os.getenv("EDITOR") or "gvim"
-explorer = "nautilus"
+explorer = "thunar"
 editor_cmd = editor
 calc_app = "gnome-calculator"
 calc_name = "GNOME Calculator"
@@ -87,7 +87,7 @@ tags = {}
 for s = 1, screen.count() do
 	-- Each screen has its own tag table.
 	tags[s] = awful.tag({ "web", "tty", "vim", "comm", "fm", "office", "vm", "gtk", "misc" }, s,
-		{ layouts[12], layouts[4], layouts[2], layouts[2], layouts[2], layouts[12], layouts[4], layouts[12], layouts[1] })
+		{ layouts[4], layouts[4], layouts[2], layouts[2], layouts[2], layouts[12], layouts[4], layouts[4], layouts[1] })
 end
 awful.tag.setmwfact(0.12, tags[2][4]) -- Set a reasonable amount of space for the Buddy List on tags[2][4]
 -- }}}
@@ -116,7 +116,7 @@ mymainmenu = awful.menu({
 		{ "Applications",   myappmenu,       beautiful.icon_path .. "places/folder.svg" },
 		{ "LibreOffice",    libreofficemenu, beautiful.icon_path .. "places/folder-documents.svg" },
 		{ "Terminal",       terminal,        beautiful.icon_path .. "apps/terminal.svg" },
-		{ "File Explorer",  explorer,        beautiful.icon_path .. "apps/nautilus.svg" },
+		{ "File Explorer",  explorer,        beautiful.icon_path .. "apps/thunar.svg" },
 		{ "GVim",          "gvim",           beautiful.icon_path .. "apps/gvim.svg" },
 		{ "Google Chrome", "google-chrome",  beautiful.icon_path .. "apps/chromium-browser.svg" },
 		{ "Pidgin",        "pidgin",         beautiful.icon_path .. "apps/pidgin.svg" },
@@ -150,7 +150,7 @@ local mem = require("widgets.mem")
 local disk = require("widgets.disk")
 local vol = require("widgets.volume")
 local net = require("widgets.network")
-local bat = require("widgets.battery")
+-- local bat = require("widgets.battery")
 -- }}}
 
 -- {{{ Wibox
@@ -176,14 +176,12 @@ mytasklist.buttons = awful.util.table.join(
 		if c == client.focus then
 			c.minimized = true
 		else
-			-- Without this, the following
-			-- :isvisible() makes no sense
+			-- Without this, the following :isvisible() makes no sense
 			c.minimized = false
 			if not c:isvisible() then
 				awful.tag.viewonly(c:tags()[1])
 			end
-			-- This will also un-minimize
-			-- the client, if needed
+			-- This will also un-minimize the client, if needed
 			client.focus = c
 			c:raise()
 		end
@@ -331,7 +329,7 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey, "Control" }, "r", awesome.restart, "Restart Awesome"),
 	awful.key({ modkey, "Shift"   }, "q", awesome.quit, "Quit Awesome"),
 	awful.key({ modkey,           }, "/", function () awful.util.spawn("screenlock.sh") end, "Lock screen"),
-	awful.key({ modkey,           }, "Print", function () awful.util.spawn("scrot") end, "Take a screenshot"),
+	awful.key({ modkey,           }, "Print", function () awful.util.spawn("scrot '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/Pictures/Screenshots/'") end, "Take a screenshot"),
 	awful.key({ modkey,           }, "F1", keydoc.display, "Display this help"),
 
 	-- Tag Manipulation
@@ -454,9 +452,11 @@ awful.rules.rules = {
 	  properties = { tag = tags[1][4] } },
 	-- File Managers
 	{ rule = { class = "Nautilus" },
-	  properties = { tag = tags[1][5] } },
+		properties = { tag = tags[1][5] } },
 	{ rule = { class = "Thunar" },
-	  properties = { tag = tags[1][5] } },
+		properties = { tag = tags[1][5] } },
+	{ rule = { name = "File Operation Progress" },
+		properties = { floating = true } },
 	-- LibreOffice
 	{ rule = { class = "libreoffice-calc" },
 	  properties = { tag = tags[1][6] } },
@@ -561,6 +561,8 @@ end
 awful.util.spawn_with_shell("setxkbmap -option ctrl:nocaps")
 awful.util.spawn_with_shell("dropbox start")
 awful.util.spawn_with_shell("numlockx on")
+awful.util.spawn_with_shell("urxvt256c-mld -q -f -o")
+awful.util.spawn_with_shell("xcompmgr -c -C -t-5 -l-5 -r4.2 -o.55")
 -- }}}
 
 -- vim: foldmethod=marker

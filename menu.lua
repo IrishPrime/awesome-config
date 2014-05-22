@@ -19,7 +19,7 @@ submenu0 = {
   { "Passwords and Keys", "/usr/bin/seahorse", "/usr/share/icons/Clarity/scalable/apps/seahorse.svg" },
   { "Screenshot", "gnome-screenshot --interactive", "/usr/share/icons/Clarity/scalable/apps/gnome-screenshot.svg" },
   { "Tweak Tool", "gnome-tweak-tool", "/usr/share/icons/Clarity/scalable/apps/control-center2.svg" },
-  { "Vi IMproved", "gvim -f", "/usr/share/icons/Clarity/scalable/apps/gtkvim.svg" }
+  { "Vi IMproved", "gvim -f", "/home/moneill/.icons/Numix-Circle/48x48/apps/vim.svg" }
 }
 submenu1 = {
   { "Document Viewer", "evince", "/usr/share/icons/Clarity/scalable/apps/evince.svg" },
