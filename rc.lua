@@ -40,13 +40,14 @@ end
 beautiful.init(awful.util.getdir("config").."/themes/awesome-solarized-dark/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "urxvt256c-mlc"
+terminal = "urxvtc" or "urxvt"
 editor = os.getenv("VISUAL") or os.getenv("EDITOR") or "gvim"
+browser = "chromium" or "google-chrome"
 explorer = "thunar"
 editor_cmd = editor
 calc_app = "gnome-calculator"
 calc_name = "GNOME Calculator"
-music_app = "google-chrome --app=https://play.google.com/music/listen"
+music_app = browser .. " --app=https://play.google.com/music/listen"
 music_name = "Google Music"
 
 -- Default modkey.
@@ -89,12 +90,12 @@ for s = 1, screen.count() do
 	tags[s] = awful.tag({ "web", "tty", "vim", "comm", "fm", "office", "vm", "gtk", "misc" }, s,
 		{ layouts[4], layouts[4], layouts[2], layouts[2], layouts[2], layouts[12], layouts[4], layouts[4], layouts[1] })
 end
-awful.tag.setmwfact(0.12, tags[2][4]) -- Set a reasonable amount of space for the Buddy List on tags[2][4]
+awful.tag.setmwfact(0.14, tags[1][4]) -- Set a reasonable amount of space for the Buddy List on tags[1][4]
 -- }}}
 
 -- {{{ Menu
 -- Create a laucher widget and a main menu
-require("menu")
+-- require("menu")
 myawesomemenu = {
 	{ "Manual",      terminal .. " -e man awesome",         beautiful.icon_path .. "actions/info.svg" },
 	{ "Edit Config", editor_cmd .. " " .. awesome.conffile, beautiful.icon_path .. "categories/package_settings.svg" },
@@ -308,20 +309,20 @@ globalkeys = awful.util.table.join(
 
 	-- Standard program
 	keydoc.group("Standard Programs"),
-	awful.key({         }, "XF86HomePage",   function () awful.util.spawn("google-chrome") end, "Google Chrome"),
-	awful.key({         }, "XF86Mail",       function () awful.util.spawn("thunderbird")   end, "Thunderbird"),
-	awful.key({         }, "XF86Search",     function () awful.util.spawn(explorer)        end, "File explorer"),
-	awful.key({         }, "XF86Calculator", function () awful.util.spawn(calc_app)        end, calc_name),
-	awful.key({         }, "XF86Launch5",    function () awful.util.spawn(terminal)        end, "Terminal"),
-	awful.key({         }, "XF86Launch6",    function () awful.util.spawn("gvim")          end, "GVim"),
-	awful.key({         }, "XF86Launch7",    function () awful.util.spawn("pidgin")        end, "Pidgin IM"),
-	awful.key({         }, "XF86Launch8",    function () awful.util.spawn("xchat")         end, "X-Chat IRC"),
-	awful.key({         }, "XF86Launch9",    function () awful.util.spawn(music_app)       end, music_name),
-	awful.key({         }, "XF86Favorites",  function () awful.util.spawn("virtualbox")    end, "VirtualBox"),
-	awful.key({ modkey, }, "Return",         function () awful.util.spawn(terminal)        end, "Terminal"),
-	awful.key({ modkey, }, "w",              function () awful.util.spawn("google-chrome") end, "Google Chrome"),
-	awful.key({ modkey, }, "v",              function () awful.util.spawn("gvim")          end, "GVim"),
-	awful.key({ modkey, }, "e",              function () awful.util.spawn(explorer)        end, "File explorer"),
+	awful.key({         }, "XF86HomePage",   function () awful.util.spawn("chromium")    end, "Browser"),
+	awful.key({         }, "XF86Mail",       function () awful.util.spawn("thunderbird") end, "Thunderbird"),
+	awful.key({         }, "XF86Search",     function () awful.util.spawn(explorer)      end, "File explorer"),
+	awful.key({         }, "XF86Calculator", function () awful.util.spawn(calc_app)      end, calc_name),
+	awful.key({         }, "XF86Launch5",    function () awful.util.spawn(terminal)      end, "Terminal"),
+	awful.key({         }, "XF86Launch6",    function () awful.util.spawn("gvim")        end, "GVim"),
+	awful.key({         }, "XF86Launch7",    function () awful.util.spawn("pidgin")      end, "Pidgin IM"),
+	awful.key({         }, "XF86Launch8",    function () awful.util.spawn("xchat")       end, "X-Chat IRC"),
+	awful.key({         }, "XF86Launch9",    function () awful.util.spawn(music_app)     end, music_name),
+	awful.key({         }, "XF86Favorites",  function () awful.util.spawn("virtualbox")  end, "VirtualBox"),
+	awful.key({ modkey, }, "Return",         function () awful.util.spawn(terminal)      end, "Terminal"),
+	awful.key({ modkey, }, "w",              function () awful.util.spawn(browser)       end, "Browser"),
+	awful.key({ modkey, }, "v",              function () awful.util.spawn("gvim")        end, "GVim"),
+	awful.key({ modkey, }, "e",              function () awful.util.spawn(explorer)      end, "File explorer"),
 
 	-- Awesome
 	keydoc.group("Awesome"),
@@ -444,6 +445,8 @@ awful.rules.rules = {
 	  properties = { floating = true } },
 	{ rule = { class = "gimp" },
       properties = { floating = true } },
+	{ rule = { class = "Chromium" },
+	  properties = { tag = tags[1][1] } },
 	{ rule = { class = "Google-chrome" },
 	  properties = { tag = tags[1][1] } },
 	{ rule = { class = "Gvim" },
@@ -462,18 +465,18 @@ awful.rules.rules = {
 	  properties = { tag = tags[1][6] } },
 	{ rule = { class = "libreoffice-writer" },
 	  properties = { tag = tags[1][6] } },
-	-- Pidgin: Screen 2, Tag 4. Buddy List as master, Conversations as slaves.
+	-- Pidgin: Screen 1, Tag 4. Buddy List as master, Conversations as slaves.
 	{ rule = { class = "Pidgin" },
-	  properties = { tag = tags[2][4] } },
-	{ rule = { class = "Pidgin", role = "conversation" },
-	  callback = awful.client.setslave },
+	  properties = { tag = tags[1][4] } },
 	{ rule = { class = "Pidgin", role = "buddy_list" },
 	  callback = awful.client.setmaster },
+	{ rule = { class = "Pidgin", role = "conversation" },
+	  callback = awful.client.setslave },
 	-- VirtualBox
 	{ rule = { class = "VirtualBox" },
-	  properties = { tag = tags[2][7] } },
+	  properties = { tag = tags[1][7] } },
 	{ rule = { class = "Thunderbird" },
-	  properties = { tag = tags[2][8] } },
+	  properties = { tag = tags[1][8] } },
 }
 -- }}}
 
@@ -558,11 +561,11 @@ end
 -- }}}
 
 -- {{{ Autostart
-awful.util.spawn_with_shell("setxkbmap -option ctrl:nocaps")
-awful.util.spawn_with_shell("dropbox start")
-awful.util.spawn_with_shell("numlockx on")
-awful.util.spawn_with_shell("urxvt256c-mld -q -f -o")
-awful.util.spawn_with_shell("xcompmgr -c -C -t-5 -l-5 -r4.2 -o.55")
+-- awful.util.spawn_with_shell("setxkbmap -option ctrl:nocaps")
+-- awful.util.spawn_with_shell("dropbox start")
+-- awful.util.spawn_with_shell("numlockx on")
+-- awful.util.spawn_with_shell("urxvt256c-mld -q -f -o")
+-- awful.util.spawn_with_shell("xcompmgr -c -C -t-5 -l-5 -r4.2 -o.55")
 -- }}}
 
 -- vim: foldmethod=marker

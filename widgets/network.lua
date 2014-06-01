@@ -22,7 +22,6 @@ vicious.register(M.downwidget, function(format, warg)
 	args['{down}'] = string.format("%.2fk", down)
 	return args
 end, "<span>${down}</span>", 1)
-vicious.cache(M.downwidget)
 
 M.upwidget = wibox.widget.textbox()
 vicious.register(M.upwidget, function(format, warg)
@@ -36,6 +35,6 @@ vicious.register(M.upwidget, function(format, warg)
 	args['{up}'] = string.format("%.2fk", up)
 	return args
 end, "<span>${up}</span>", 1)
-vicious.cache(M.upwidget)
+vicious.cache(M.downwidget, M.upwidget)
 
 return M
