@@ -307,6 +307,10 @@ globalkeys = awful.util.table.join(
 	awful.key({ modkey,        }, "Prior", function () awful.util.spawn("amixer set Master 5%+",     false) end),
 	awful.key({ modkey,        }, "Next",  function () awful.util.spawn("amixer set Master 5%-",     false) end),
 
+	-- Monitor brightness
+	awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn("light -A 5",     false) end),
+	awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn("light -U 5",     false) end),
+
 	-- Standard program
 	keydoc.group("Standard Programs"),
 	awful.key({         }, "XF86HomePage",   function () awful.util.spawn("chromium")    end, "Browser"),
