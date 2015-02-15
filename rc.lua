@@ -451,6 +451,8 @@ awful.rules.rules = {
       properties = { floating = true } },
 	{ rule = { class = "Chromium" },
 	  properties = { tag = tags[1][1] } },
+	{ rule = { class = "Chromium", role = "pop-up" },
+	  properties = { tag = tags[1][1], floating = true } },
 	{ rule = { class = "Google-chrome" },
 	  properties = { tag = tags[1][1] } },
 	{ rule = { class = "Gvim" },
