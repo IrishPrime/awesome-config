@@ -469,6 +469,9 @@ awful.rules.rules = {
 	  callback = awful.client.setslave },
 	{ rule = { class = "Pidgin", role = "buddy_list" },
 	  callback = awful.client.setmaster },
+	-- HipChat
+	{ rule = { class = "HipChat" },
+	  properties = { tag = tags[2][8] } },
 	-- VirtualBox
 	{ rule = { class = "VirtualBox" },
 	  properties = { tag = tags[2][7] } },
